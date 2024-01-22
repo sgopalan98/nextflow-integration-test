@@ -38,7 +38,7 @@ process CountLines {
 
     script:
     """
-    wc -l ${file_to_count} | awk '{print "no of lines: " \$1}' > line_count.txt
+    wc -l ${file_to_count} | awk '{print "lines no: " \$1}' > line_count.txt
     """
 }
 
