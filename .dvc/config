@@ -1,0 +1,4 @@
+[core]
+    remote = test_bucket
+['remote "test_bucket"']
+    url = gs://test-dvc-bucket

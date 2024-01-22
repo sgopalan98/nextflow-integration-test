@@ -1,0 +1,23 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf"
+    script "../main.nf"
+
+    test("Should run without failures and ") {
+
+        when {
+            params {
+                gcp_url = System.getenv("TEST_DATA1")
+                output_dir = "${outputDir}"
+            }
+        }
+
+        then {
+            assert workflow.success
+
+            assert new File("${outputDir}/line_count.txt").exists()
+        }
+
+    }
+
+}

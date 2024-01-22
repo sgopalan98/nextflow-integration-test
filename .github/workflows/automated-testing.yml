@@ -1,0 +1,44 @@
+name: Automated Testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11' # Specify the Java version here
+        distribution: 'adopt' # You can choose a distribution like 'adopt' or 'temurin'
+        
+    - uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+
+    - name: Install Nextflow
+      run: |
+        curl -s https://get.nextflow.io | bash
+        sudo mv nextflow /usr/local/bin/
+
+    - name: Install nf-test
+      run: |
+        curl -fsSL https://code.askimed.com/install/nf-test | bash
+        sudo mv nf-test /usr/local/bin/
+
+    - uses: iterative/setup-dvc@v1
+
+    - name: Run Nextflow automated tests
+      run: |
+        cd tests
+        ./run-tests.sh
